@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MozaCounter"
         mc:Ignorable="d"
-        Title="Moza Counter" Height="200" Width="350"
+        Title="MZCounter" Height="200" Width="250"
         Icon="Resources/icon32.png">
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -19,7 +19,7 @@
             <StackPanel Orientation="Horizontal" Margin="5">
                 <RadioButton x:Name="RadioStart" Content="실행" IsChecked="True" Margin="0,0,20,0" GroupName="Status" Checked="RadioButton_CheckedChanged"/>
                 <RadioButton x:Name="RadioStop" Content="중지" GroupName="Status" Checked="RadioButton_CheckedChanged"/>
-                <TextBlock x:Name="TxtStatus" Text="실행중" VerticalAlignment="Center" Margin="20,0,0,0" FontWeight="Bold" Foreground="Green"/>
+                <TextBlock x:Name="TxtStatus" Text="실행중" VerticalAlignment="Center" Margin="30,0,0,0" FontWeight="Bold" Foreground="Green"/>
             </StackPanel>
         </GroupBox>
 

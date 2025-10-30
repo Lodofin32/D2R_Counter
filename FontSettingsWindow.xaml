@@ -132,7 +132,7 @@
 
         <!-- 버튼 -->
         <Grid Grid.Row="6">
-            <TextBlock Text="Copyright© Lodofin32 All rights reserved." 
+            <TextBlock Text="Copyright© Lodofin32 All rights reserved. (v0.25.1)" 
                        VerticalAlignment="Center" 
                        HorizontalAlignment="Left"
                        Foreground="Gray"

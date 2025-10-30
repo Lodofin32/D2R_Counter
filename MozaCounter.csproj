@@ -9,6 +9,8 @@
     <UseWindowsForms>true</UseWindowsForms>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>false</SelfContained>
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+    <AssemblyName>MZCounter</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +21,27 @@
     <Resource Include="Resources\icon16.png" />
     <Resource Include="Resources\icon32.png" />
     <Resource Include="Resources\icon64.png" />
+    <Resource Include="Resources\app.ico" />
   </ItemGroup>
+
+  <Target Name="CopyToReleaseFolder" AfterTargets="Build" Condition="'$(Configuration)'=='Release'">
+    <MakeDir Directories="$(ProjectDir)Release" />
+    <ItemGroup>
+      <FilesToCopy Include="$(TargetDir)**\*.*" Exclude="$(TargetDir)**\*.pdb" />
+    </ItemGroup>
+    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(ProjectDir)Release\%(RecursiveDir)" SkipUnchangedFiles="true" />
+    <Message Text="Release 파일이 $(ProjectDir)Release 폴더에 복사되었습니다." Importance="high" />
+  </Target>
+
+  <Target Name="CopyAfterPublish" AfterTargets="Publish" Condition="'$(Configuration)'=='Release' and '$(PublishSingleFile)'=='true'">
+    <MakeDir Directories="$(ProjectDir)Release" />
+    <RemoveDir Directories="$(ProjectDir)Release" />
+    <MakeDir Directories="$(ProjectDir)Release" />
+    <ItemGroup>
+      <SingleExe Include="$(PublishDir)*.exe" />
+    </ItemGroup>
+    <Copy SourceFiles="@(SingleExe)" DestinationFolder="$(ProjectDir)Release" />
+    <Message Text="단일 exe 파일이 $(ProjectDir)Release 폴더에 복사되었습니다." Importance="high" />
+  </Target>
 
 </Project>
