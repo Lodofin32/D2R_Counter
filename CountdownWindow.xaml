@@ -1,0 +1,21 @@
+<Window x:Class="MozaCounter.CountdownWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MozaCounter"
+        mc:Ignorable="d"
+        Title="CountdownWindow" 
+        WindowStyle="None" 
+        AllowsTransparency="True" 
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize">
+    <Grid>
+        <TextBlock x:Name="TxtCountdown" 
+                   Text="15"
+                   TextAlignment="Center"/>
+    </Grid>
+</Window>

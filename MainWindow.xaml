@@ -1,0 +1,33 @@
+<Window x:Class="MozaCounter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MozaCounter"
+        mc:Ignorable="d"
+        Title="Moza Counter" Height="200" Width="350"
+        Icon="Resources/icon32.png">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 1. 실행/중지 라디오버튼 -->
+        <GroupBox Header="상태" Grid.Row="0" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <RadioButton x:Name="RadioStart" Content="실행" IsChecked="True" Margin="0,0,20,0" GroupName="Status" Checked="RadioButton_CheckedChanged"/>
+                <RadioButton x:Name="RadioStop" Content="중지" GroupName="Status" Checked="RadioButton_CheckedChanged"/>
+                <TextBlock x:Name="TxtStatus" Text="실행중" VerticalAlignment="Center" Margin="20,0,0,0" FontWeight="Bold" Foreground="Green"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- 2. 설정 -->
+        <GroupBox Header="설정" Grid.Row="1" Margin="0,0,0,10">
+            <StackPanel Margin="5">
+                <Button x:Name="BtnSettings" Content="설정 열기" Padding="5" Click="BtnSettings_Click"/>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</Window>
