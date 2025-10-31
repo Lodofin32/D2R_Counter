@@ -6,140 +6,309 @@
         xmlns:local="clr-namespace:MozaCounter"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="설정" Height="500" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
-        Icon="Resources/icon32.png">
+        Title="설정" Height="590" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        Icon="Resources/icon_32.png">
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- 폰트 설정 -->
-        <GroupBox Header="폰트 설정" Grid.Row="0" Margin="0,0,0,10">
-            <Grid Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="1.5*"/>
-                </Grid.ColumnDefinitions>
-                
-                <Label Content="종류:" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,0"/>
-                <ComboBox x:Name="CmbFontFamily" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,10,0" SelectionChanged="CmbFontFamily_SelectionChanged"/>
-                
-                <Label Content="크기:" Grid.Column="2" VerticalAlignment="Center" Margin="0,0,0,0"/>
-                <TextBox x:Name="TxtFontSize" Grid.Column="3" Text="24" VerticalAlignment="Center" Margin="0,0,5,0" TextChanged="TxtFontSize_TextChanged"/>
-                
-                <Label Content="색상:" Grid.Column="4" VerticalAlignment="Center" Margin="0,0,0,0"/>
-                <xctk:ColorPicker x:Name="FontColorPicker" Grid.Column="5"
-                                  SelectedColor="White" 
-                                  DisplayColorAndName="False"
-                                  ShowAvailableColors="True"
-                                  ShowRecentColors="True"
-                                  VerticalAlignment="Center"
-                                  SelectedColorChanged="FontColorPicker_SelectedColorChanged"/>
-            </Grid>
-        </GroupBox>
+        <!-- Tab Control -->
+        <TabControl Grid.Row="0" Margin="0,0,0,10">
+            <!-- Key1 Tab -->
+            <TabItem Header="Key1" ToolTip="Key1의 카운터 설정을 변경합니다">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-        <!-- 테두리 설정 -->
-        <GroupBox Header="폰트배경 설정" Grid.Row="1" Margin="0,0,0,10">
-            <Grid Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-                
-                <Label Content="두께:" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <Slider x:Name="SliderBorderThickness" Grid.Column="1" 
-                        Minimum="0" Maximum="10" Value="2" 
-                        TickFrequency="1" IsSnapToTickEnabled="True"
-                        VerticalAlignment="Center" Margin="0,0,5,0"
-                        ValueChanged="SliderBorderThickness_ValueChanged"/>
-                <Label x:Name="LblBorderThickness" Content="2" Grid.Column="2" 
-                       VerticalAlignment="Center" Margin="0,0,10,0" MinWidth="20"/>
-                
-                <Label Content="색상:" Grid.Column="3" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <xctk:ColorPicker x:Name="BorderColorPicker" Grid.Column="4"
-                                  SelectedColor="Black" 
-                                  DisplayColorAndName="False"
-                                  ShowAvailableColors="True"
-                                  ShowRecentColors="True"
-                                  VerticalAlignment="Center"
-                                  SelectedColorChanged="BorderColorPicker_SelectedColorChanged"/>
-            </Grid>
-        </GroupBox>
+                        <!-- 폰트 설정 -->
+                        <GroupBox Header="폰트 설정" Grid.Row="0" Margin="0,0,0,10" ToolTip="카운터 숫자의 폰트를 설정합니다">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Label Content="종류:" Grid.Column="0" VerticalAlignment="Center" ToolTip="폰트 종류"/>
+                                <ComboBox x:Name="Key1_CmbFontFamily" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,10,0" SelectionChanged="Key1_CmbFontFamily_SelectionChanged"
+                                          ToolTip="카운터 숫자에 사용할 폰트를 선택합니다"/>
+                                
+                                <Label Content="크기:" Grid.Column="2" VerticalAlignment="Center" ToolTip="폰트 크기"/>
+                                <TextBox x:Name="Key1_TxtFontSize" Grid.Column="3" Text="24" VerticalAlignment="Center" Margin="0,0,5,0" TextChanged="Key1_TxtFontSize_TextChanged"
+                                         ToolTip="카운터 숫자의 크기를 입력합니다 (예: 24, 48)"/>
+                                
+                                <Label Content="색상:" Grid.Column="4" VerticalAlignment="Center" ToolTip="폰트 색상"/>
+                                <xctk:ColorPicker x:Name="Key1_FontColorPicker" Grid.Column="5"
+                                                  SelectedColor="White" 
+                                                  DisplayColorAndName="False"
+                                                  ShowAvailableColors="True"
+                                                  ShowRecentColors="True"
+                                                  VerticalAlignment="Center"
+                                                  SelectedColorChanged="Key1_FontColorPicker_SelectedColorChanged"
+                                                  ToolTip="카운터 숫자의 색상을 선택합니다"/>
+                            </Grid>
+                        </GroupBox>
 
-        <!-- 카운터 위치 설정 -->
-        <GroupBox Header="카운터 위치" Grid.Row="2" Margin="0,0,0,10">
-            <Grid Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Label Content="X:" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="TxtPosX" Grid.Column="1" Margin="5,0,10,0" Text="100" VerticalAlignment="Center"/>
-                <Label Content="Y:" Grid.Column="2" VerticalAlignment="Center"/>
-                <TextBox x:Name="TxtPosY" Grid.Column="3" Margin="5,0,0,0" Text="100" VerticalAlignment="Center"/>
-            </Grid>
-        </GroupBox>
+                        <!-- 폰트배경 설정 -->
+                        <GroupBox Header="폰트배경 설정" Grid.Row="1" Margin="0,0,0,10" ToolTip="카운터 숫자 주변의 테두리(그림자) 효과를 설정합니다">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Label Content="두께:" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0" ToolTip="테두리 두께"/>
+                                <Slider x:Name="Key1_SliderBorderThickness" Grid.Column="1" 
+                                        Minimum="0" Maximum="10" Value="2" 
+                                        TickFrequency="1" IsSnapToTickEnabled="True"
+                                        VerticalAlignment="Center" Margin="0,0,5,0"
+                                        ValueChanged="Key1_SliderBorderThickness_ValueChanged"
+                                        ToolTip="테두리 두께를 조절합니다. 0이면 테두리가 없습니다"/>
+                                <Label x:Name="Key1_LblBorderThickness" Content="2" Grid.Column="2" 
+                                       VerticalAlignment="Center" Margin="0,0,10,0" MinWidth="20"
+                                       ToolTip="현재 설정된 테두리 두께"/>
+                                
+                                <Label Content="색상:" Grid.Column="3" VerticalAlignment="Center" Margin="0,0,5,0" ToolTip="테두리 색상"/>
+                                <xctk:ColorPicker x:Name="Key1_BorderColorPicker" Grid.Column="4"
+                                                  SelectedColor="Black" 
+                                                  DisplayColorAndName="False"
+                                                  ShowAvailableColors="True"
+                                                  ShowRecentColors="True"
+                                                  VerticalAlignment="Center"
+                                                  SelectedColorChanged="Key1_BorderColorPicker_SelectedColorChanged"
+                                                  ToolTip="테두리(그림자) 색상을 선택합니다"/>
+                            </Grid>
+                        </GroupBox>
 
-        <!-- 마우스 위치 추적 ON/OFF -->
-        <GroupBox Header="마우스 위치 추적" Grid.Row="3" Margin="0,0,0,10">
-            <StackPanel Orientation="Horizontal" Margin="5">
-                <ToggleButton x:Name="BtnTrackMouse" Content="OFF" Width="80" Click="BtnTrackMouse_Click"/>
-                <TextBlock x:Name="TxtMousePos" Margin="10,0,0,0" VerticalAlignment="Center" Text="마우스 위치(F1 입력시 설정): -"/>
-            </StackPanel>
-        </GroupBox>
+                        <!-- 카운터 위치 설정 -->
+                        <GroupBox Header="카운터 위치" Grid.Row="2" Margin="0,0,0,10" ToolTip="화면에서 카운터가 표시될 위치를 설정합니다">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="X:" Grid.Column="0" VerticalAlignment="Center" ToolTip="가로 위치 (픽셀)"/>
+                                <TextBox x:Name="Key1_TxtPosX" Grid.Column="1" Margin="5,0,10,0" Text="100" VerticalAlignment="Center"
+                                         ToolTip="화면의 가로 위치를 픽셀 단위로 입력합니다"/>
+                                <Label Content="Y:" Grid.Column="2" VerticalAlignment="Center" ToolTip="세로 위치 (픽셀)"/>
+                                <TextBox x:Name="Key1_TxtPosY" Grid.Column="3" Margin="5,0,0,0" Text="100" VerticalAlignment="Center"
+                                         ToolTip="화면의 세로 위치를 픽셀 단위로 입력합니다"/>
+                            </Grid>
+                        </GroupBox>
 
-        <!-- 카운트 시작 시간 & 트리거 키 -->
-        <GroupBox Header="카운트 설정" Grid.Row="4" Margin="0,0,0,10">
-            <Grid Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-                
-                <Label Content="시작 시간:" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="TxtStartTime" Grid.Column="1" Text="15" VerticalAlignment="Center" Margin="5,0,10,0"/>
-                
-                <Label Content="트리거 키:" Grid.Column="2" VerticalAlignment="Center"/>
-                <ComboBox x:Name="CmbTriggerKey" Grid.Column="3" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            </Grid>
-        </GroupBox>
+                        <!-- 마우스 위치 추적 ON/OFF -->
+                        <GroupBox Header="마우스 위치 추적" Grid.Row="3" Margin="0,0,0,10" ToolTip="마우스를 이용해 카운터 위치를 쉽게 설정할 수 있습니다">
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <ToggleButton x:Name="Key1_BtnTrackMouse" Content="OFF" Width="80" Click="Key1_BtnTrackMouse_Click"
+                                              ToolTip="ON으로 전환하면 현재 마우스 위치를 실시간으로 표시합니다. F1 키를 누르면 해당 위치로 설정됩니다"/>
+                                <TextBlock x:Name="Key1_TxtMousePos" Margin="10,0,0,0" VerticalAlignment="Center" Text="마우스 위치(F1 입력시 설정): -"
+                                           ToolTip="현재 마우스 위치가 표시됩니다. F1 키를 누르면 이 위치로 카운터가 설정됩니다"/>
+                            </StackPanel>
+                        </GroupBox>
 
-        <!-- 미리보기 -->
-        <GroupBox Header="미리보기" Grid.Row="5" Margin="0,0,0,10">
-            <Border x:Name="PreviewBorder" Margin="5">
-                <TextBlock x:Name="PreviewText" Text="15" 
-                          HorizontalAlignment="Center" 
-                          VerticalAlignment="Center"/>
-            </Border>
-        </GroupBox>
+                        <!-- 카운트 설정 -->
+                        <GroupBox Header="카운트 설정" Grid.Row="4" Margin="0,0,0,10" ToolTip="카운트다운 동작을 설정합니다">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Label Content="시작 시간:" Grid.Column="0" VerticalAlignment="Center" ToolTip="카운트 시작 숫자"/>
+                                <TextBox x:Name="Key1_TxtStartTime" Grid.Column="1" Text="15" VerticalAlignment="Center" Margin="5,0,10,0"
+                                         ToolTip="카운트다운이 시작되는 숫자를 입력합니다 (예: 15면 15부터 0까지 카운트)"/>
+                                
+                                <Label Content="트리거 키:" Grid.Column="2" VerticalAlignment="Center" ToolTip="카운트를 시작할 키"/>
+                                <ComboBox x:Name="Key1_CmbTriggerKey" Grid.Column="3" VerticalAlignment="Center" Margin="5,0,0,0"
+                                          ToolTip="이 키를 누르면 카운트다운이 시작됩니다. 다시 누르면 리셋됩니다"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- 미리보기 -->
+                        <GroupBox Header="미리보기" Grid.Row="5" Margin="0,0,0,10" ToolTip="현재 설정된 모양을 미리 확인합니다">
+                            <Border x:Name="Key1_PreviewBorder" Margin="5" MinHeight="30">
+                                <TextBlock x:Name="Key1_PreviewText" Text="15" 
+                                          HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"
+                                          ToolTip="설정한 폰트, 크기, 색상, 테두리가 적용된 미리보기"/>
+                            </Border>
+                        </GroupBox>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Key2 Tab -->
+            <TabItem Header="Key2" ToolTip="Key2의 카운터 설정을 변경합니다">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- 폰트 설정 -->
+                        <GroupBox Header="폰트 설정" Grid.Row="0" Margin="0,0,0,10" ToolTip="카운터 숫자의 폰트를 설정합니다">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Label Content="종류:" Grid.Column="0" VerticalAlignment="Center" ToolTip="폰트 종류"/>
+                                <ComboBox x:Name="Key2_CmbFontFamily" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,10,0" SelectionChanged="Key2_CmbFontFamily_SelectionChanged"
+                                          ToolTip="카운터 숫자에 사용할 폰트를 선택합니다"/>
+                                
+                                <Label Content="크기:" Grid.Column="2" VerticalAlignment="Center" ToolTip="폰트 크기"/>
+                                <TextBox x:Name="Key2_TxtFontSize" Grid.Column="3" Text="24" VerticalAlignment="Center" Margin="0,0,5,0" TextChanged="Key2_TxtFontSize_TextChanged"
+                                         ToolTip="카운터 숫자의 크기를 입력합니다 (예: 24, 48)"/>
+                                
+                                <Label Content="색상:" Grid.Column="4" VerticalAlignment="Center" ToolTip="폰트 색상"/>
+                                <xctk:ColorPicker x:Name="Key2_FontColorPicker" Grid.Column="5"
+                                                  SelectedColor="White" 
+                                                  DisplayColorAndName="False"
+                                                  ShowAvailableColors="True"
+                                                  ShowRecentColors="True"
+                                                  VerticalAlignment="Center"
+                                                  SelectedColorChanged="Key2_FontColorPicker_SelectedColorChanged"
+                                                  ToolTip="카운터 숫자의 색상을 선택합니다"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- 폰트배경 설정 -->
+                        <GroupBox Header="폰트배경 설정" Grid.Row="1" Margin="0,0,0,10" ToolTip="카운터 숫자 주변의 테두리(그림자) 효과를 설정합니다">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Label Content="두께:" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0" ToolTip="테두리 두께"/>
+                                <Slider x:Name="Key2_SliderBorderThickness" Grid.Column="1" 
+                                        Minimum="0" Maximum="10" Value="2" 
+                                        TickFrequency="1" IsSnapToTickEnabled="True"
+                                        VerticalAlignment="Center" Margin="0,0,5,0"
+                                        ValueChanged="Key2_SliderBorderThickness_ValueChanged"
+                                        ToolTip="테두리 두께를 조절합니다. 0이면 테두리가 없습니다"/>
+                                <Label x:Name="Key2_LblBorderThickness" Content="2" Grid.Column="2" 
+                                       VerticalAlignment="Center" Margin="0,0,10,0" MinWidth="20"
+                                       ToolTip="현재 설정된 테두리 두께"/>
+                                
+                                <Label Content="색상:" Grid.Column="3" VerticalAlignment="Center" Margin="0,0,5,0" ToolTip="테두리 색상"/>
+                                <xctk:ColorPicker x:Name="Key2_BorderColorPicker" Grid.Column="4"
+                                                  SelectedColor="Black" 
+                                                  DisplayColorAndName="False"
+                                                  ShowAvailableColors="True"
+                                                  ShowRecentColors="True"
+                                                  VerticalAlignment="Center"
+                                                  SelectedColorChanged="Key2_BorderColorPicker_SelectedColorChanged"
+                                                  ToolTip="테두리(그림자) 색상을 선택합니다"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- 카운터 위치 설정 -->
+                        <GroupBox Header="카운터 위치" Grid.Row="2" Margin="0,0,0,10" ToolTip="화면에서 카운터가 표시될 위치를 설정합니다">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Content="X:" Grid.Column="0" VerticalAlignment="Center" ToolTip="가로 위치 (픽셀)"/>
+                                <TextBox x:Name="Key2_TxtPosX" Grid.Column="1" Margin="5,0,10,0" Text="200" VerticalAlignment="Center"
+                                         ToolTip="화면의 가로 위치를 픽셀 단위로 입력합니다"/>
+                                <Label Content="Y:" Grid.Column="2" VerticalAlignment="Center" ToolTip="세로 위치 (픽셀)"/>
+                                <TextBox x:Name="Key2_TxtPosY" Grid.Column="3" Margin="5,0,0,0" Text="200" VerticalAlignment="Center"
+                                         ToolTip="화면의 세로 위치를 픽셀 단위로 입력합니다"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- 마우스 위치 추적 ON/OFF -->
+                        <GroupBox Header="마우스 위치 추적" Grid.Row="3" Margin="0,0,0,10" ToolTip="마우스를 이용해 카운터 위치를 쉽게 설정할 수 있습니다">
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <ToggleButton x:Name="Key2_BtnTrackMouse" Content="OFF" Width="80" Click="Key2_BtnTrackMouse_Click"
+                                              ToolTip="ON으로 전환하면 현재 마우스 위치를 실시간으로 표시합니다. F1 키를 누르면 해당 위치로 설정됩니다"/>
+                                <TextBlock x:Name="Key2_TxtMousePos" Margin="10,0,0,0" VerticalAlignment="Center" Text="마우스 위치(F1 입력시 설정): -"
+                                           ToolTip="현재 마우스 위치가 표시됩니다. F1 키를 누르면 이 위치로 카운터가 설정됩니다"/>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <!-- 카운트 설정 -->
+                        <GroupBox Header="카운트 설정" Grid.Row="4" Margin="0,0,0,10" ToolTip="카운트다운 동작을 설정합니다">
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Label Content="시작 시간:" Grid.Column="0" VerticalAlignment="Center" ToolTip="카운트 시작 숫자"/>
+                                <TextBox x:Name="Key2_TxtStartTime" Grid.Column="1" Text="15" VerticalAlignment="Center" Margin="5,0,10,0"
+                                         ToolTip="카운트다운이 시작되는 숫자를 입력합니다 (예: 15면 15부터 0까지 카운트)"/>
+                                
+                                <Label Content="트리거 키:" Grid.Column="2" VerticalAlignment="Center" ToolTip="카운트를 시작할 키"/>
+                                <ComboBox x:Name="Key2_CmbTriggerKey" Grid.Column="3" VerticalAlignment="Center" Margin="5,0,0,0"
+                                          ToolTip="이 키를 누르면 카운트다운이 시작됩니다. 다시 누르면 리셋됩니다"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- 미리보기 -->
+                        <GroupBox Header="미리보기" Grid.Row="5" Margin="0,0,0,10" ToolTip="현재 설정된 모양을 미리 확인합니다">
+                            <Border x:Name="Key2_PreviewBorder" Margin="5" MinHeight="30">
+                                <TextBlock x:Name="Key2_PreviewText" Text="15" 
+                                          HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"
+                                          ToolTip="설정한 폰트, 크기, 색상, 테두리가 적용된 미리보기"/>
+                            </Border>
+                        </GroupBox>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
 
         <!-- 버튼 -->
-        <Grid Grid.Row="6">
-            <TextBlock Text="Copyright© Lodofin32 All rights reserved. (v0.25.1)" 
+        <Grid Grid.Row="1">
+            <TextBlock Text="Copyright© Lodofin32 All rights reserved. (v0.25.2)" 
                        VerticalAlignment="Center" 
                        HorizontalAlignment="Left"
                        Foreground="Gray"
                        FontSize="10"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="BtnOk" Content="확인" Width="80" Padding="5" Margin="0,0,10,0" Click="BtnOk_Click"/>
-                <Button x:Name="BtnCancel" Content="취소" Width="80" Padding="5" Click="BtnCancel_Click"/>
+                <Button x:Name="BtnOk" Content="확인" Width="80" Padding="5" Margin="0,0,10,0" Click="BtnOk_Click"
+                        ToolTip="설정을 저장하고 창을 닫습니다"/>
+                <Button x:Name="BtnCancel" Content="취소" Width="80" Padding="5" Click="BtnCancel_Click"
+                        ToolTip="설정을 저장하지 않고 창을 닫습니다"/>
             </StackPanel>
         </Grid>
     </Grid>

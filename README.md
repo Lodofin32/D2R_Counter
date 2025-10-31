@@ -1,4 +1,4 @@
-﻿# MZCounter
+# CoolTimer
 
 Diablo 2 Resurrected 전용 카운터 프로그램
 
@@ -10,37 +10,52 @@ Diablo 2 Resurrected 전용 카운터 프로그램
 
 ## 주요 기능
 
+- ✅ **듀얼 카운터 지원** - Key1, Key2 두 개의 독립적인 카운터 동시 사용
+- ✅ **선택적 키 활성화** - 사용할 키만 체크박스로 선택하여 활성화
 - ✅ **전역 트리거 키** - 게임 실행 중에도 단축키로 카운터 시작/리셋
 - ✅ **커스터마이징 가능한 폰트** - 종류, 크기, 색상 자유롭게 설정
 - ✅ **폰트 배경 효과** - 가독성을 위한 테두리/그림자 효과
 - ✅ **마우스 위치 추적** - F1 키로 간편하게 카운터 위치 설정
+- ✅ **직관적인 UI** - 모든 컨트롤에 툴팁 설명 제공
 - ✅ **자동 설정 저장** - 프로그램 종료 시 모든 설정 자동 저장
 - ✅ **투명 오버레이** - 게임 화면 위에 표시되는 투명 윈도우
+- ✅ **키 블록 방지** - 비동기 처리로 게임 키 입력 지연 없음
 
 ## 시스템 요구사항
 
-- **OS**: Windows 10/11
-- **Runtime**: .NET 9.0 Runtime ([다운로드](https://dotnet.microsoft.com/download/dotnet/9.0))
+- **OS**: Windows 10/11 (64-bit)
+- **Runtime**: .NET 9.0 
 - **권장**: 듀얼 모니터 환경
 
 ## 다운로드 및 설치
 
 1. [Releases](https://github.com/Lodofin32/D2R_Counter/releases) 페이지에서 최신 버전 다운로드
-2. 또는 리포지토리에서 `MZCounter.exe` 다운로드
-3. 별도 설치 없이 `MZCounter.exe` 실행
+2. 또는 리포지토리에서 `CoolTimer.exe` 다운로드
+3. **별도 설치 및 런타임 불필요**, `CoolTimer.exe` 단일 파일 실행
+4. ⚠️ 첫 실행 시 Windows Defender SmartScreen 경고 발생 가능
+   - "추가 정보" → "실행" 클릭하여 실행
 
 ## 사용 방법
 
 ### 1. 초기 설정
 
 #### 1-1. 프로그램 실행
-- `MZCounter.exe` 더블클릭
+- `CoolTimer.exe` 더블클릭
 - 메인 창이 나타나며 기본적으로 "실행중" 상태
+- Key1, Key2 두 개의 카운터가 기본적으로 활성화됨
 
-#### 1-2. 설정 창 열기
+#### 1-2. 키 선택
+메인 창의 "키 선택" 그룹에서 사용할 키를 선택합니다:
+- **Key1 체크박스**: Key1 카운터 활성화/비활성화
+- **Key2 체크박스**: Key2 카운터 활성화/비활성화
+- 체크된 키만 트리거 키 입력 시 동작
+- 현재 설정된 트리거 키가 라벨에 표시됨 (예: "Key1 (Space)", "Key2 (1)")
+
+#### 1-3. 설정 창 열기
 - 메인 창에서 **"설정 열기"** 버튼 클릭
 - 설정 창이 열리면 자동으로 "중지" 상태로 전환
 - (트리거 키가 비활성화되어 실수로 카운터가 시작되지 않음)
+- Key1, Key2 탭으로 각각 독립적으로 설정 가능
 
 ### 2. 설정 항목 상세
 
@@ -81,7 +96,9 @@ Diablo 2 Resurrected 전용 카운터 프로그램
   - D2R 테러존 리젠: 15초 권장
 - **트리거 키**: 카운터를 시작/리셋할 단축키
   - 선택 가능: Space, Enter, F1~F12, A~Z, 0~9 등
-  - 권장: Space (게임 중 빠른 접근)
+  - 숫자 키(0~9)는 D0~D9 대신 0~9로 직관적으로 표시
+  - Key1과 Key2에 각각 다른 트리거 키 설정 가능
+  - 권장: Key1=Space, Key2=1 (게임 중 빠른 접근)
 
 #### 👁️ 미리보기
 - 설정한 폰트와 효과를 실시간으로 확인
@@ -295,36 +312,36 @@ dotnet build
 dotnet build -c Release
 ```
 
-#### 단일 실행 파일 생성
+#### 단일 실행 파일 생성 (Self-contained)
 ```bash
-dotnet publish -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true
+dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
 ```
-출력: `Release\MZCounter.exe`
+출력: `Release\CoolTimer.exe` (약 165MB, 런타임 포함)
 
 ### 프로젝트 구조
 ```
 MozaCounter/
-├── MainWindow.xaml/cs          # 메인 윈도우
-├── FontSettingsWindow.xaml/cs  # 설정 창
+├── MainWindow.xaml/cs          # 메인 윈도우 (듀얼 카운터 제어)
+├── FontSettingsWindow.xaml/cs  # 설정 창 (Key1/Key2 탭)
 ├── CountdownWindow.xaml/cs     # 카운트다운 표시
-├── GlobalKeyboardHook.cs       # 키보드 후킹
-├── AppSettings.cs              # 설정 관리
-├── OutlinedTextBlock.cs        # 커스텀 텍스트 컨트롤 (미사용)
+├── GlobalKeyboardHook.cs       # 전역 키보드 후킹
+├── AppSettings.cs              # 설정 관리 (Key1/Key2 저장)
 └── Resources/                  # 아이콘 리소스
-    ├── icon16.png
-    ├── icon32.png
-    ├── icon64.png
-    └── app.ico
+    ├── icon_16.png
+    ├── icon_32.png
+    ├── icon_64.png
+    └── icon.ico
 ```
 
 ## 문제 해결
 
 ### Q1. 프로그램이 실행되지 않아요
 **A1:**
-- .NET 9.0 Runtime 설치 확인
-  - [다운로드 링크](https://dotnet.microsoft.com/download/dotnet/9.0)
 - Windows Defender 예외 등록
+  - 서명되지 않은 실행 파일로 인한 오탐 가능
 - 관리자 권한으로 실행 시도
+- Windows 10/11 64-bit 확인
+  - Self-contained 빌드로 런타임 불필요
 
 ### Q2. 카운터가 보이지 않아요
 **A2:**
@@ -359,22 +376,23 @@ MozaCounter/
 
 ## 알려진 제한사항
 
-1. **전체화면 모드**: D2R 전체화면 모드에서는 오버레이가 표시되지 않습니다
-   - **해결**: 윈도우 모드 또는 테두리 없는 창 모드 사용
-
-2. **다중 모니터**: 게임 창을 다른 모니터로 이동 시 카운터 위치 재설정 필요
+1. **다중 모니터**: 게임 창을 다른 모니터로 이동 시 카운터 위치 재설정 필요
    - **해결**: 마우스 추적 기능으로 빠르게 재설정
 
-3. **높은 DPI**: 고해상도 모니터에서 폰트 크기 조절 필요
+2**높은 DPI**: 고해상도 모니터에서 폰트 크기 조절 필요
    - **해결**: 폰트 크기를 100 이상으로 설정
 
-## 향후 계획
+## 변경 이력
 
-- [ ] 다중 카운터 지원
-- [ ] 사운드 알림 기능
-- [ ] 프리셋 저장/불러오기
-- [ ] 자동 업데이트 기능
-- [ ] 다국어 지원 (English)
+### v0.26.2 (2025-10-31)
+- ✅ 듀얼 카운터 지원 (Key1, Key2)
+- ✅ 선택적 키 활성화 (체크박스)
+- ✅ 모든 컨트롤에 툴팁 설명 추가
+- ✅ 숫자 키 표시 개선 (D1 → 1)
+- ✅ 키 블록 방지 (비동기 처리)
+- ✅ Self-contained 단일 exe 빌드
+- ✅ 프로그램명 변경 (MZCounter → CoolTimer)
+- ✅ 아이콘 업데이트
 
 ## 라이선스
 

@@ -11,32 +11,32 @@ namespace MozaCounter
         private int currentCount;
         private int startTime;
 
-        public CountdownWindow(AppSettings settings)
+        public CountdownWindow(KeySettings keySettings)
         {
             InitializeComponent();
 
-            startTime = settings.StartTime;
+            startTime = keySettings.StartTime;
             currentCount = startTime;
 
             // 위치 설정
-            this.Left = settings.CounterPosX;
-            this.Top = settings.CounterPosY;
+            this.Left = keySettings.CounterPosX;
+            this.Top = keySettings.CounterPosY;
 
             // 폰트 설정
-            var fontFamily = new FontFamily(settings.FontFamily);
+            var fontFamily = new FontFamily(keySettings.FontFamily);
             TxtCountdown.FontFamily = fontFamily;
-            TxtCountdown.FontSize = settings.FontSize;
-            TxtCountdown.Foreground = new SolidColorBrush(settings.GetFontColor());
+            TxtCountdown.FontSize = keySettings.FontSize;
+            TxtCountdown.Foreground = new SolidColorBrush(keySettings.GetFontColor());
 
             // 배경 효과 설정
-            if (settings.BorderThickness > 0)
+            if (keySettings.BorderThickness > 0)
             {
                 TxtCountdown.Effect = new System.Windows.Media.Effects.DropShadowEffect
                 {
-                    Color = settings.GetBorderColor(),
+                    Color = keySettings.GetBorderColor(),
                     Direction = 0,
                     ShadowDepth = 0,
-                    BlurRadius = settings.BorderThickness * 2,
+                    BlurRadius = keySettings.BorderThickness * 2,
                     Opacity = 1
                 };
             }

@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace MozaCounter
 {
-    public class AppSettings
+    public class KeySettings
     {
         public string FontFamily { get; set; } = "맑은 고딕";
         public double FontSize { get; set; } = 24;
@@ -21,6 +21,45 @@ namespace MozaCounter
         public int CounterPosY { get; set; } = 100;
         public int StartTime { get; set; } = 15;
         public string TriggerKey { get; set; } = "Space";
+
+        public Color GetFontColor()
+        {
+            return Color.FromRgb(FontColorR, FontColorG, FontColorB);
+        }
+
+        public void SetFontColor(Color color)
+        {
+            FontColorR = color.R;
+            FontColorG = color.G;
+            FontColorB = color.B;
+        }
+
+        public Color GetBorderColor()
+        {
+            return Color.FromRgb(BorderColorR, BorderColorG, BorderColorB);
+        }
+
+        public void SetBorderColor(Color color)
+        {
+            BorderColorR = color.R;
+            BorderColorG = color.G;
+            BorderColorB = color.B;
+        }
+    }
+
+    public class AppSettings
+    {
+        public KeySettings Key1 { get; set; } = new KeySettings();
+        public KeySettings Key2 { get; set; } = new KeySettings 
+        { 
+            CounterPosX = 200, 
+            CounterPosY = 200,
+            TriggerKey = "D"
+        };
+        
+        // 키 활성화 상태
+        public bool Key1Enabled { get; set; } = true;
+        public bool Key2Enabled { get; set; } = true;
         
         // 윈도우 위치
         public double MainWindowLeft { get; set; } = 100;
@@ -70,30 +109,6 @@ namespace MozaCounter
             {
                 MessageBox.Show($"설정 저장 실패: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-        }
-
-        public Color GetFontColor()
-        {
-            return Color.FromRgb(FontColorR, FontColorG, FontColorB);
-        }
-
-        public void SetFontColor(Color color)
-        {
-            FontColorR = color.R;
-            FontColorG = color.G;
-            FontColorB = color.B;
-        }
-
-        public Color GetBorderColor()
-        {
-            return Color.FromRgb(BorderColorR, BorderColorG, BorderColorB);
-        }
-
-        public void SetBorderColor(Color color)
-        {
-            BorderColorR = color.R;
-            BorderColorG = color.G;
-            BorderColorB = color.B;
         }
     }
 }

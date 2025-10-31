@@ -3,12 +3,22 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Markup;
 using System.Windows.Threading;
 
 namespace MozaCounter
 {
+    // 트리거 키 매핑 클래스 (표시 이름과 실제 키 값을 분리)
+    public class KeyMapping
+    {
+        public string DisplayName { get; set; } = "";
+        public string ActualKey { get; set; } = "";
+        
+        public override string ToString() => DisplayName;
+    }
+
     public partial class FontSettingsWindow : Window
     {
         private bool isInitializing = true;
@@ -16,15 +26,27 @@ namespace MozaCounter
         private Dictionary<string, FontFamily> fontFamilyMap = new Dictionary<string, FontFamily>();
         private AppSettings settings;
 
-        public FontFamily SelectedFontFamily { get; private set; } = new FontFamily("Arial");
-        public double SelectedFontSize { get; private set; }
-        public Color SelectedFontColor { get; private set; }
-        public double SelectedBorderThickness { get; private set; }
-        public Color SelectedBorderColor { get; private set; }
-        public int CounterPosX { get; private set; }
-        public int CounterPosY { get; private set; }
-        public int StartTime { get; private set; }
-        public string TriggerKey { get; private set; } = "Space";
+        // Key1 설정
+        public FontFamily Key1_SelectedFontFamily { get; private set; } = new FontFamily("Arial");
+        public double Key1_SelectedFontSize { get; private set; }
+        public Color Key1_SelectedFontColor { get; private set; }
+        public double Key1_SelectedBorderThickness { get; private set; }
+        public Color Key1_SelectedBorderColor { get; private set; }
+        public int Key1_CounterPosX { get; private set; }
+        public int Key1_CounterPosY { get; private set; }
+        public int Key1_StartTime { get; private set; }
+        public string Key1_TriggerKey { get; private set; } = "Space";
+
+        // Key2 설정
+        public FontFamily Key2_SelectedFontFamily { get; private set; } = new FontFamily("Arial");
+        public double Key2_SelectedFontSize { get; private set; }
+        public Color Key2_SelectedFontColor { get; private set; }
+        public double Key2_SelectedBorderThickness { get; private set; }
+        public Color Key2_SelectedBorderColor { get; private set; }
+        public int Key2_CounterPosX { get; private set; }
+        public int Key2_CounterPosY { get; private set; }
+        public int Key2_StartTime { get; private set; }
+        public string Key2_TriggerKey { get; private set; } = "D";
 
         public FontSettingsWindow(AppSettings appSettings)
         {
@@ -37,7 +59,8 @@ namespace MozaCounter
             LoadSettings();
             
             isInitializing = false;
-            UpdatePreview();
+            UpdateKey1Preview();
+            UpdateKey2Preview();
             
             // 윈도우 위치 복원
             this.Left = settings.SettingsWindowLeft;
@@ -58,43 +81,84 @@ namespace MozaCounter
 
         private void LoadSettings()
         {
-            // 폰트 설정 불러오기
-            SelectedFontSize = settings.FontSize;
-            SelectedFontColor = settings.GetFontColor();
-            SelectedBorderThickness = settings.BorderThickness;
-            SelectedBorderColor = settings.GetBorderColor();
-            CounterPosX = settings.CounterPosX;
-            CounterPosY = settings.CounterPosY;
-            StartTime = settings.StartTime;
-            TriggerKey = settings.TriggerKey;
+            // Key1 설정 불러오기
+            Key1_SelectedFontSize = settings.Key1.FontSize;
+            Key1_SelectedFontColor = settings.Key1.GetFontColor();
+            Key1_SelectedBorderThickness = settings.Key1.BorderThickness;
+            Key1_SelectedBorderColor = settings.Key1.GetBorderColor();
+            Key1_CounterPosX = settings.Key1.CounterPosX;
+            Key1_CounterPosY = settings.Key1.CounterPosY;
+            Key1_StartTime = settings.Key1.StartTime;
+            Key1_TriggerKey = settings.Key1.TriggerKey;
 
-            // UI 컨트롤에 값 설정
-            TxtFontSize.Text = settings.FontSize.ToString();
-            FontColorPicker.SelectedColor = settings.GetFontColor();
-            SliderBorderThickness.Value = settings.BorderThickness;
-            LblBorderThickness.Content = settings.BorderThickness.ToString();
-            BorderColorPicker.SelectedColor = settings.GetBorderColor();
-            TxtPosX.Text = settings.CounterPosX.ToString();
-            TxtPosY.Text = settings.CounterPosY.ToString();
-            TxtStartTime.Text = settings.StartTime.ToString();
-            TxtMousePos.Text = "마우스 위치(F1 입력시 설정): -";
+            // Key1 UI 컨트롤에 값 설정
+            Key1_TxtFontSize.Text = settings.Key1.FontSize.ToString();
+            Key1_FontColorPicker.SelectedColor = settings.Key1.GetFontColor();
+            Key1_SliderBorderThickness.Value = settings.Key1.BorderThickness;
+            Key1_LblBorderThickness.Content = settings.Key1.BorderThickness.ToString();
+            Key1_BorderColorPicker.SelectedColor = settings.Key1.GetBorderColor();
+            Key1_TxtPosX.Text = settings.Key1.CounterPosX.ToString();
+            Key1_TxtPosY.Text = settings.Key1.CounterPosY.ToString();
+            Key1_TxtStartTime.Text = settings.Key1.StartTime.ToString();
+            Key1_TxtMousePos.Text = "마우스 위치(F1 입력시 설정): -";
 
-            // 폰트 패밀리 선택
-            for (int i = 0; i < CmbFontFamily.Items.Count; i++)
+            // Key1 폰트 패밀리 선택
+            for (int i = 0; i < Key1_CmbFontFamily.Items.Count; i++)
             {
-                if (CmbFontFamily.Items[i].ToString() == settings.FontFamily)
+                if (Key1_CmbFontFamily.Items[i].ToString() == settings.Key1.FontFamily)
                 {
-                    CmbFontFamily.SelectedIndex = i;
+                    Key1_CmbFontFamily.SelectedIndex = i;
                     break;
                 }
             }
 
-            // 트리거 키 선택
-            for (int i = 0; i < CmbTriggerKey.Items.Count; i++)
+            // Key1 트리거 키 선택
+            for (int i = 0; i < Key1_CmbTriggerKey.Items.Count; i++)
             {
-                if (CmbTriggerKey.Items[i].ToString() == settings.TriggerKey)
+                if (Key1_CmbTriggerKey.Items[i] is KeyMapping mapping && mapping.ActualKey == settings.Key1.TriggerKey)
                 {
-                    CmbTriggerKey.SelectedIndex = i;
+                    Key1_CmbTriggerKey.SelectedIndex = i;
+                    break;
+                }
+            }
+
+            // Key2 설정 불러오기
+            Key2_SelectedFontSize = settings.Key2.FontSize;
+            Key2_SelectedFontColor = settings.Key2.GetFontColor();
+            Key2_SelectedBorderThickness = settings.Key2.BorderThickness;
+            Key2_SelectedBorderColor = settings.Key2.GetBorderColor();
+            Key2_CounterPosX = settings.Key2.CounterPosX;
+            Key2_CounterPosY = settings.Key2.CounterPosY;
+            Key2_StartTime = settings.Key2.StartTime;
+            Key2_TriggerKey = settings.Key2.TriggerKey;
+
+            // Key2 UI 컨트롤에 값 설정
+            Key2_TxtFontSize.Text = settings.Key2.FontSize.ToString();
+            Key2_FontColorPicker.SelectedColor = settings.Key2.GetFontColor();
+            Key2_SliderBorderThickness.Value = settings.Key2.BorderThickness;
+            Key2_LblBorderThickness.Content = settings.Key2.BorderThickness.ToString();
+            Key2_BorderColorPicker.SelectedColor = settings.Key2.GetBorderColor();
+            Key2_TxtPosX.Text = settings.Key2.CounterPosX.ToString();
+            Key2_TxtPosY.Text = settings.Key2.CounterPosY.ToString();
+            Key2_TxtStartTime.Text = settings.Key2.StartTime.ToString();
+            Key2_TxtMousePos.Text = "마우스 위치(F1 입력시 설정): -";
+
+            // Key2 폰트 패밀리 선택
+            for (int i = 0; i < Key2_CmbFontFamily.Items.Count; i++)
+            {
+                if (Key2_CmbFontFamily.Items[i].ToString() == settings.Key2.FontFamily)
+                {
+                    Key2_CmbFontFamily.SelectedIndex = i;
+                    break;
+                }
+            }
+
+            // Key2 트리거 키 선택
+            for (int i = 0; i < Key2_CmbTriggerKey.Items.Count; i++)
+            {
+                if (Key2_CmbTriggerKey.Items[i] is KeyMapping mapping && mapping.ActualKey == settings.Key2.TriggerKey)
+                {
+                    Key2_CmbTriggerKey.SelectedIndex = i;
                     break;
                 }
             }
@@ -102,15 +166,27 @@ namespace MozaCounter
 
         public AppSettings GetSettings()
         {
-            settings.FontFamily = CmbFontFamily.SelectedItem?.ToString() ?? "맑은 고딕";
-            settings.FontSize = SelectedFontSize;
-            settings.SetFontColor(SelectedFontColor);
-            settings.BorderThickness = SelectedBorderThickness;
-            settings.SetBorderColor(SelectedBorderColor);
-            settings.CounterPosX = CounterPosX;
-            settings.CounterPosY = CounterPosY;
-            settings.StartTime = StartTime;
-            settings.TriggerKey = TriggerKey;
+            // Key1 설정 저장
+            settings.Key1.FontFamily = Key1_CmbFontFamily.SelectedItem?.ToString() ?? "맑은 고딕";
+            settings.Key1.FontSize = Key1_SelectedFontSize;
+            settings.Key1.SetFontColor(Key1_SelectedFontColor);
+            settings.Key1.BorderThickness = Key1_SelectedBorderThickness;
+            settings.Key1.SetBorderColor(Key1_SelectedBorderColor);
+            settings.Key1.CounterPosX = Key1_CounterPosX;
+            settings.Key1.CounterPosY = Key1_CounterPosY;
+            settings.Key1.StartTime = Key1_StartTime;
+            settings.Key1.TriggerKey = Key1_TriggerKey;
+
+            // Key2 설정 저장
+            settings.Key2.FontFamily = Key2_CmbFontFamily.SelectedItem?.ToString() ?? "맑은 고딕";
+            settings.Key2.FontSize = Key2_SelectedFontSize;
+            settings.Key2.SetFontColor(Key2_SelectedFontColor);
+            settings.Key2.BorderThickness = Key2_SelectedBorderThickness;
+            settings.Key2.SetBorderColor(Key2_SelectedBorderColor);
+            settings.Key2.CounterPosX = Key2_CounterPosX;
+            settings.Key2.CounterPosY = Key2_CounterPosY;
+            settings.Key2.StartTime = Key2_StartTime;
+            settings.Key2.TriggerKey = Key2_TriggerKey;
 
             return settings;
         }
@@ -146,17 +222,18 @@ namespace MozaCounter
             // 가나다 순으로 정렬
             fontList.Sort((a, b) => string.Compare(a.DisplayName, b.DisplayName, StringComparison.CurrentCulture));
 
-            // 콤보박스에 추가
+            // 콤보박스에 추가 (Key1, Key2)
             foreach (var font in fontList)
             {
-                CmbFontFamily.Items.Add(font.DisplayName);
+                Key1_CmbFontFamily.Items.Add(font.DisplayName);
+                Key2_CmbFontFamily.Items.Add(font.DisplayName);
             }
 
             // 기본 폰트 선택 (맑은 고딕이 있으면 선택, 없으면 첫 번째)
             var malgunGothicIndex = -1;
-            for (int i = 0; i < CmbFontFamily.Items.Count; i++)
+            for (int i = 0; i < Key1_CmbFontFamily.Items.Count; i++)
             {
-                var name = CmbFontFamily.Items[i].ToString();
+                var name = Key1_CmbFontFamily.Items[i].ToString();
                 if (name == "맑은 고딕" || name == "Malgun Gothic")
                 {
                     malgunGothicIndex = i;
@@ -164,13 +241,23 @@ namespace MozaCounter
                 }
             }
             
-            if (CmbFontFamily.Items.Count > 0)
+            if (Key1_CmbFontFamily.Items.Count > 0)
             {
-                CmbFontFamily.SelectedIndex = malgunGothicIndex >= 0 ? malgunGothicIndex : 0;
-                var selectedName = CmbFontFamily.SelectedItem?.ToString();
+                Key1_CmbFontFamily.SelectedIndex = malgunGothicIndex >= 0 ? malgunGothicIndex : 0;
+                var selectedName = Key1_CmbFontFamily.SelectedItem?.ToString();
                 if (selectedName != null && fontFamilyMap.ContainsKey(selectedName))
                 {
-                    SelectedFontFamily = fontFamilyMap[selectedName];
+                    Key1_SelectedFontFamily = fontFamilyMap[selectedName];
+                }
+            }
+
+            if (Key2_CmbFontFamily.Items.Count > 0)
+            {
+                Key2_CmbFontFamily.SelectedIndex = malgunGothicIndex >= 0 ? malgunGothicIndex : 0;
+                var selectedName = Key2_CmbFontFamily.SelectedItem?.ToString();
+                if (selectedName != null && fontFamilyMap.ContainsKey(selectedName))
+                {
+                    Key2_SelectedFontFamily = fontFamilyMap[selectedName];
                 }
             }
         }
@@ -196,9 +283,26 @@ namespace MozaCounter
 
             foreach (var key in keys)
             {
-                CmbTriggerKey.Items.Add(key);
+                var mapping = new KeyMapping 
+                { 
+                    ActualKey = key,
+                    DisplayName = GetDisplayName(key)
+                };
+                Key1_CmbTriggerKey.Items.Add(mapping);
+                Key2_CmbTriggerKey.Items.Add(new KeyMapping { ActualKey = key, DisplayName = GetDisplayName(key) });
             }
-            CmbTriggerKey.SelectedIndex = 0;
+            Key1_CmbTriggerKey.SelectedIndex = 0;
+            Key2_CmbTriggerKey.SelectedIndex = 0;
+        }
+
+        private string GetDisplayName(string key)
+        {
+            // D0~D9를 0~9로 표시
+            if (key.StartsWith("D") && key.Length == 2 && char.IsDigit(key[1]))
+            {
+                return key.Substring(1); // "D1" -> "1"
+            }
+            return key;
         }
 
         private void InitializeMouseTracking()
@@ -210,133 +314,265 @@ namespace MozaCounter
             mouseTrackTimer.Tick += MouseTrackTimer_Tick;
         }
 
-        private void CmbFontFamily_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        // Key1 이벤트 핸들러
+        private void Key1_CmbFontFamily_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (isInitializing || CmbFontFamily.SelectedItem == null) return;
+            if (isInitializing || Key1_CmbFontFamily.SelectedItem == null) return;
             
-            var selectedName = CmbFontFamily.SelectedItem.ToString();
+            var selectedName = Key1_CmbFontFamily.SelectedItem.ToString();
             if (selectedName != null && fontFamilyMap.ContainsKey(selectedName))
             {
-                SelectedFontFamily = fontFamilyMap[selectedName];
-                UpdatePreview();
+                Key1_SelectedFontFamily = fontFamilyMap[selectedName];
+                UpdateKey1Preview();
             }
         }
 
-        private void TxtFontSize_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void Key1_TxtFontSize_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             if (isInitializing) return;
             
-            if (double.TryParse(TxtFontSize.Text, out double size) && size > 0)
+            if (double.TryParse(Key1_TxtFontSize.Text, out double size) && size > 0)
             {
-                SelectedFontSize = size;
-                UpdatePreview();
+                Key1_SelectedFontSize = size;
+                UpdateKey1Preview();
             }
         }
 
-        private void FontColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
+        private void Key1_FontColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
         {
-            if (isInitializing || !FontColorPicker.SelectedColor.HasValue) return;
+            if (isInitializing || !Key1_FontColorPicker.SelectedColor.HasValue) return;
             
-            SelectedFontColor = FontColorPicker.SelectedColor.Value;
-            UpdatePreview();
+            Key1_SelectedFontColor = Key1_FontColorPicker.SelectedColor.Value;
+            UpdateKey1Preview();
         }
 
-        private void BorderColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
+        private void Key1_BorderColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
         {
-            if (isInitializing || !BorderColorPicker.SelectedColor.HasValue) return;
+            if (isInitializing || !Key1_BorderColorPicker.SelectedColor.HasValue) return;
             
-            SelectedBorderColor = BorderColorPicker.SelectedColor.Value;
-            UpdatePreview();
+            Key1_SelectedBorderColor = Key1_BorderColorPicker.SelectedColor.Value;
+            UpdateKey1Preview();
         }
 
-        private void SliderBorderThickness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void Key1_SliderBorderThickness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (isInitializing) return;
             
-            SelectedBorderThickness = SliderBorderThickness.Value;
-            if (LblBorderThickness != null)
+            Key1_SelectedBorderThickness = Key1_SliderBorderThickness.Value;
+            if (Key1_LblBorderThickness != null)
             {
-                LblBorderThickness.Content = SliderBorderThickness.Value.ToString("F0");
+                Key1_LblBorderThickness.Content = Key1_SliderBorderThickness.Value.ToString("F0");
             }
-            UpdatePreview();
+            UpdateKey1Preview();
         }
 
-        private void BtnTrackMouse_Click(object sender, RoutedEventArgs e)
+        private void Key1_BtnTrackMouse_Click(object sender, RoutedEventArgs e)
         {
-            if (BtnTrackMouse.IsChecked == true)
+            if (Key1_BtnTrackMouse.IsChecked == true)
             {
-                BtnTrackMouse.Content = "ON";
+                Key1_BtnTrackMouse.Content = "ON";
+                Key2_BtnTrackMouse.IsChecked = false;
+                Key2_BtnTrackMouse.Content = "OFF";
                 mouseTrackTimer?.Start();
             }
             else
             {
-                BtnTrackMouse.Content = "OFF";
+                Key1_BtnTrackMouse.Content = "OFF";
                 mouseTrackTimer?.Stop();
-                TxtMousePos.Text = "마우스 위치(F1 입력시 설정): -";
+                Key1_TxtMousePos.Text = "마우스 위치(F1 입력시 설정): -";
+            }
+        }
+
+        // Key2 이벤트 핸들러
+        private void Key2_CmbFontFamily_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (isInitializing || Key2_CmbFontFamily.SelectedItem == null) return;
+            
+            var selectedName = Key2_CmbFontFamily.SelectedItem.ToString();
+            if (selectedName != null && fontFamilyMap.ContainsKey(selectedName))
+            {
+                Key2_SelectedFontFamily = fontFamilyMap[selectedName];
+                UpdateKey2Preview();
+            }
+        }
+
+        private void Key2_TxtFontSize_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if (isInitializing) return;
+            
+            if (double.TryParse(Key2_TxtFontSize.Text, out double size) && size > 0)
+            {
+                Key2_SelectedFontSize = size;
+                UpdateKey2Preview();
+            }
+        }
+
+        private void Key2_FontColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
+        {
+            if (isInitializing || !Key2_FontColorPicker.SelectedColor.HasValue) return;
+            
+            Key2_SelectedFontColor = Key2_FontColorPicker.SelectedColor.Value;
+            UpdateKey2Preview();
+        }
+
+        private void Key2_BorderColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
+        {
+            if (isInitializing || !Key2_BorderColorPicker.SelectedColor.HasValue) return;
+            
+            Key2_SelectedBorderColor = Key2_BorderColorPicker.SelectedColor.Value;
+            UpdateKey2Preview();
+        }
+
+        private void Key2_SliderBorderThickness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (isInitializing) return;
+            
+            Key2_SelectedBorderThickness = Key2_SliderBorderThickness.Value;
+            if (Key2_LblBorderThickness != null)
+            {
+                Key2_LblBorderThickness.Content = Key2_SliderBorderThickness.Value.ToString("F0");
+            }
+            UpdateKey2Preview();
+        }
+
+        private void Key2_BtnTrackMouse_Click(object sender, RoutedEventArgs e)
+        {
+            if (Key2_BtnTrackMouse.IsChecked == true)
+            {
+                Key2_BtnTrackMouse.Content = "ON";
+                Key1_BtnTrackMouse.IsChecked = false;
+                Key1_BtnTrackMouse.Content = "OFF";
+                mouseTrackTimer?.Start();
+            }
+            else
+            {
+                Key2_BtnTrackMouse.Content = "OFF";
+                mouseTrackTimer?.Stop();
+                Key2_TxtMousePos.Text = "마우스 위치(F1 입력시 설정): -";
             }
         }
 
         private void MouseTrackTimer_Tick(object? sender, EventArgs e)
         {
             var position = System.Windows.Forms.Control.MousePosition;
-            TxtMousePos.Text = $"마우스 위치(F1 입력시 설정): {position.X}, {position.Y}";
+            if (Key1_BtnTrackMouse.IsChecked == true)
+            {
+                Key1_TxtMousePos.Text = $"마우스 위치(F1 입력시 설정): {position.X}, {position.Y}";
+            }
+            else if (Key2_BtnTrackMouse.IsChecked == true)
+            {
+                Key2_TxtMousePos.Text = $"마우스 위치(F1 입력시 설정): {position.X}, {position.Y}";
+            }
         }
 
         private void FontSettingsWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == System.Windows.Input.Key.F1 && BtnTrackMouse.IsChecked == true)
+            if (e.Key == System.Windows.Input.Key.F1)
             {
-                // 현재 마우스 위치를 카운터 위치에 설정
-                var position = System.Windows.Forms.Control.MousePosition;
-                TxtPosX.Text = position.X.ToString();
-                TxtPosY.Text = position.Y.ToString();
-                
-                // 버튼을 OFF로 전환
-                BtnTrackMouse.IsChecked = false;
-                BtnTrackMouse.Content = "OFF";
-                mouseTrackTimer?.Stop();
-                TxtMousePos.Text = "마우스 위치(F1 입력시 설정): -";
-                
-                e.Handled = true;
+                if (Key1_BtnTrackMouse.IsChecked == true)
+                {
+                    // 현재 마우스 위치를 Key1 카운터 위치에 설정
+                    var position = System.Windows.Forms.Control.MousePosition;
+                    Key1_TxtPosX.Text = position.X.ToString();
+                    Key1_TxtPosY.Text = position.Y.ToString();
+                    
+                    // 버튼을 OFF로 전환
+                    Key1_BtnTrackMouse.IsChecked = false;
+                    Key1_BtnTrackMouse.Content = "OFF";
+                    mouseTrackTimer?.Stop();
+                    Key1_TxtMousePos.Text = "마우스 위치(F1 입력시 설정): -";
+                    
+                    e.Handled = true;
+                }
+                else if (Key2_BtnTrackMouse.IsChecked == true)
+                {
+                    // 현재 마우스 위치를 Key2 카운터 위치에 설정
+                    var position = System.Windows.Forms.Control.MousePosition;
+                    Key2_TxtPosX.Text = position.X.ToString();
+                    Key2_TxtPosY.Text = position.Y.ToString();
+                    
+                    // 버튼을 OFF로 전환
+                    Key2_BtnTrackMouse.IsChecked = false;
+                    Key2_BtnTrackMouse.Content = "OFF";
+                    mouseTrackTimer?.Stop();
+                    Key2_TxtMousePos.Text = "마우스 위치(F1 입력시 설정): -";
+                    
+                    e.Handled = true;
+                }
             }
         }
 
-        private void UpdatePreview()
+        private void UpdateKey1Preview()
         {
-            if (PreviewText == null) return;
+            if (Key1_PreviewText == null) return;
             
-            PreviewText.FontFamily = SelectedFontFamily;
-            PreviewText.FontSize = SelectedFontSize;
-            PreviewText.Foreground = new SolidColorBrush(SelectedFontColor);
+            Key1_PreviewText.FontFamily = Key1_SelectedFontFamily;
+            Key1_PreviewText.FontSize = Key1_SelectedFontSize;
+            Key1_PreviewText.Foreground = new SolidColorBrush(Key1_SelectedFontColor);
             
-            if (SelectedBorderThickness > 0)
+            if (Key1_SelectedBorderThickness > 0)
             {
-                PreviewText.Effect = new System.Windows.Media.Effects.DropShadowEffect
+                Key1_PreviewText.Effect = new System.Windows.Media.Effects.DropShadowEffect
                 {
-                    Color = SelectedBorderColor,
+                    Color = Key1_SelectedBorderColor,
                     Direction = 0,
                     ShadowDepth = 0,
-                    BlurRadius = SelectedBorderThickness * 2,
+                    BlurRadius = Key1_SelectedBorderThickness * 2,
                     Opacity = 1
                 };
             }
             else
             {
-                PreviewText.Effect = null;
+                Key1_PreviewText.Effect = null;
+            }
+        }
+
+        private void UpdateKey2Preview()
+        {
+            if (Key2_PreviewText == null) return;
+            
+            Key2_PreviewText.FontFamily = Key2_SelectedFontFamily;
+            Key2_PreviewText.FontSize = Key2_SelectedFontSize;
+            Key2_PreviewText.Foreground = new SolidColorBrush(Key2_SelectedFontColor);
+            
+            if (Key2_SelectedBorderThickness > 0)
+            {
+                Key2_PreviewText.Effect = new System.Windows.Media.Effects.DropShadowEffect
+                {
+                    Color = Key2_SelectedBorderColor,
+                    Direction = 0,
+                    ShadowDepth = 0,
+                    BlurRadius = Key2_SelectedBorderThickness * 2,
+                    Opacity = 1
+                };
+            }
+            else
+            {
+                Key2_PreviewText.Effect = null;
             }
         }
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
-            // 값 저장
-            if (int.TryParse(TxtPosX.Text, out int posX))
-                CounterPosX = posX;
-            if (int.TryParse(TxtPosY.Text, out int posY))
-                CounterPosY = posY;
-            if (int.TryParse(TxtStartTime.Text, out int startTime) && startTime > 0)
-                StartTime = startTime;
-            if (CmbTriggerKey.SelectedItem != null)
-                TriggerKey = CmbTriggerKey.SelectedItem.ToString()!;
+            // Key1 값 저장
+            if (int.TryParse(Key1_TxtPosX.Text, out int key1PosX))
+                Key1_CounterPosX = key1PosX;
+            if (int.TryParse(Key1_TxtPosY.Text, out int key1PosY))
+                Key1_CounterPosY = key1PosY;
+            if (int.TryParse(Key1_TxtStartTime.Text, out int key1StartTime) && key1StartTime > 0)
+                Key1_StartTime = key1StartTime;
+            if (Key1_CmbTriggerKey.SelectedItem is KeyMapping key1Mapping)
+                Key1_TriggerKey = key1Mapping.ActualKey;
+
+            // Key2 값 저장
+            if (int.TryParse(Key2_TxtPosX.Text, out int key2PosX))
+                Key2_CounterPosX = key2PosX;
+            if (int.TryParse(Key2_TxtPosY.Text, out int key2PosY))
+                Key2_CounterPosY = key2PosY;
+            if (int.TryParse(Key2_TxtStartTime.Text, out int key2StartTime) && key2StartTime > 0)
+                Key2_StartTime = key2StartTime;
+            if (Key2_CmbTriggerKey.SelectedItem is KeyMapping key2Mapping)
+                Key2_TriggerKey = key2Mapping.ActualKey;
 
             // 마우스 추적 중지
             mouseTrackTimer?.Stop();

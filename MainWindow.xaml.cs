@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,7 +18,8 @@ namespace MozaCounter
     {
         private AppSettings settings;
         private GlobalKeyboardHook? keyboardHook;
-        private CountdownWindow? countdownWindow;
+        private CountdownWindow? key1CountdownWindow;
+        private CountdownWindow? key2CountdownWindow;
         private bool isRunning = false;
 
         public MainWindow()
@@ -29,6 +30,11 @@ namespace MozaCounter
             // 윈도우 위치 복원
             this.Left = settings.MainWindowLeft;
             this.Top = settings.MainWindowTop;
+            
+            // 체크박스 상태 복원 및 텍스트 업데이트
+            ChkKey1.IsChecked = settings.Key1Enabled;
+            ChkKey2.IsChecked = settings.Key2Enabled;
+            UpdateCheckBoxLabels();
             
             // 윈도우 닫힐 때 위치 저장
             this.Closing += MainWindow_Closing;
@@ -49,7 +55,8 @@ namespace MozaCounter
             keyboardHook?.Dispose();
 
             // 카운트다운 윈도우 닫기
-            countdownWindow?.StopCountdown();
+            key1CountdownWindow?.StopCountdown();
+            key2CountdownWindow?.StopCountdown();
         }
 
         private void RadioButton_CheckedChanged(object sender, RoutedEventArgs e)
@@ -82,10 +89,16 @@ namespace MozaCounter
             keyboardHook?.Unhook();
             
             // 카운트다운 윈도우 닫기
-            if (countdownWindow != null)
+            if (key1CountdownWindow != null)
             {
-                countdownWindow.StopCountdown();
-                countdownWindow = null;
+                key1CountdownWindow.StopCountdown();
+                key1CountdownWindow = null;
+            }
+            
+            if (key2CountdownWindow != null)
+            {
+                key2CountdownWindow.StopCountdown();
+                key2CountdownWindow = null;
             }
         }
 
@@ -95,24 +108,75 @@ namespace MozaCounter
 
             // 설정된 트리거 키와 비교
             string pressedKey = e.ToString();
-            if (pressedKey == settings.TriggerKey)
+            
+            // Key1 트리거 체크 (활성화된 경우에만)
+            if (settings.Key1Enabled && pressedKey == settings.Key1.TriggerKey)
             {
-                Dispatcher.Invoke(() =>
+                // BeginInvoke를 사용하여 비동기 실행 (키 블럭 방지)
+                Dispatcher.BeginInvoke(() =>
                 {
-                    if (countdownWindow == null)
+                    if (key1CountdownWindow == null)
                     {
                         // 새 카운트다운 시작
-                        countdownWindow = new CountdownWindow(settings);
-                        countdownWindow.Show();
-                        countdownWindow.StartCountdown();
+                        key1CountdownWindow = new CountdownWindow(settings.Key1);
+                        key1CountdownWindow.Show();
+                        key1CountdownWindow.StartCountdown();
                     }
                     else
                     {
                         // 카운트다운 리셋
-                        countdownWindow.ResetCountdown();
+                        key1CountdownWindow.ResetCountdown();
                     }
                 });
             }
+            
+            // Key2 트리거 체크 (활성화된 경우에만)
+            if (settings.Key2Enabled && pressedKey == settings.Key2.TriggerKey)
+            {
+                // BeginInvoke를 사용하여 비동기 실행 (키 블럭 방지)
+                Dispatcher.BeginInvoke(() =>
+                {
+                    if (key2CountdownWindow == null)
+                    {
+                        // 새 카운트다운 시작
+                        key2CountdownWindow = new CountdownWindow(settings.Key2);
+                        key2CountdownWindow.Show();
+                        key2CountdownWindow.StartCountdown();
+                    }
+                    else
+                    {
+                        // 카운트다운 리셋
+                        key2CountdownWindow.ResetCountdown();
+                    }
+                });
+            }
+        }
+
+        private void ChkKey_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            // 초기화 중이거나 컨트롤이 null이면 무시
+            if (ChkKey1 == null || ChkKey2 == null || settings == null) return;
+            
+            // 체크박스 상태를 settings에 저장
+            settings.Key1Enabled = ChkKey1.IsChecked == true;
+            settings.Key2Enabled = ChkKey2.IsChecked == true;
+            settings.Save();
+        }
+
+        private void UpdateCheckBoxLabels()
+        {
+            ChkKey1.Content = $"Key1 ({GetDisplayName(settings.Key1.TriggerKey)})";
+            ChkKey2.Content = $"Key2 ({GetDisplayName(settings.Key2.TriggerKey)})";
+        }
+
+        private string GetDisplayName(string key)
+        {
+            // D0~D9를 0~9로 표시
+            if (key.StartsWith("D") && key.Length == 2 && char.IsDigit(key[1]))
+            {
+                return key.Substring(1); // "D1" -> "1"
+            }
+            return key;
         }
 
         private void BtnSettings_Click(object sender, RoutedEventArgs e)
@@ -127,6 +191,9 @@ namespace MozaCounter
                 // 설정이 변경되면 저장
                 settings = settingsWindow.GetSettings();
                 settings.Save();
+                
+                // 체크박스 라벨 업데이트 (트리거 키가 변경되었을 수 있음)
+                UpdateCheckBoxLabels();
             }
         }
     }
