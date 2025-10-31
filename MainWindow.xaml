@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MozaCounter"
         mc:Ignorable="d"
-        Title="MZCounter" Height="230" Width="250"
+        Title="CoolTimer" Height="230" Width="250"
         Icon="Resources/icon_32.png">
     <Grid Margin="10">
         <Grid.RowDefinitions>
